@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0079b8" />
+  <title>CBD Event Registration</title>
+  <style>
+    :root {
+      --cbd-blue: #0079b8;
+      --cbd-sky: #46b6e4;
+      --cbd-deep: #00628f;
+      --cbd-green: #bfd730;
+      --ink: #07324a;
+      --paper: #ffffff;
+      --soft: #f4fbfd;
+      --muted: #527286;
+      --line: rgba(7, 50, 74, 0.18);
+      --danger: #b00020;
+      --warn: #8a5b00;
+      --good: #087a38;
+      --shadow: rgba(0, 63, 95, 0.18);
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      color: var(--ink);
+      min-height: 100vh;
+      background:
+        linear-gradient(126deg, rgba(191, 215, 48, 0.88) 0 19%, transparent 19.2%),
+        linear-gradient(74deg, rgba(70, 182, 228, 0.9) 0 32%, transparent 32.2%),
+        linear-gradient(112deg, transparent 0 43%, rgba(0, 98, 143, 0.48) 43.2% 54%, transparent 54.2%),
+        linear-gradient(145deg, #029ad0 0%, #0079b8 43%, #66bf71 100%);
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(66deg, transparent 0 33%, rgba(191, 215, 48, 0.45) 33.2% 39%, transparent 39.2%),
+        linear-gradient(102deg, transparent 0 46%, rgba(0, 98, 143, 0.38) 46.2% 57%, transparent 57.2%),
+        radial-gradient(circle at 84% 18%, rgba(255, 255, 255, 0.3), transparent 24%);
+      mix-blend-mode: screen;
+    }
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 42px;
+      position: relative;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      max-width: 760px;
+      margin: 0 auto 26px;
+      margin-bottom: 26px;
+    }
+    .logoWrap {
+      display: inline-flex;
+      align-items: center;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 8px;
+      padding: 10px 14px;
+      box-shadow: 0 16px 42px rgba(0, 63, 95, 0.16);
+      backdrop-filter: blur(12px);
+    }
+    .logoWrap img {
+      width: 142px;
+      max-width: 44vw;
+      height: auto;
+      display: block;
+    }
+    .hero {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--ink);
+      border: 1px solid rgba(255, 255, 255, 0.78);
+      border-radius: 8px;
+      padding: 22px;
+      box-shadow: 0 24px 70px var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+    .formHeader {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .formHeader h2 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+    .row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: end;
+      margin-bottom: 10px;
+    }
+    .field { flex: 1 1 220px; min-width: 220px; }
+    label {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    input, select {
+      padding: 13px 12px;
+      font-size: 16px;
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--soft);
+      color: var(--ink);
+      outline: none;
+    }
+    input:focus, select:focus {
+      border-color: var(--cbd-blue);
+      box-shadow: 0 0 0 4px rgba(70, 182, 228, 0.22);
+      background: #ffffff;
+    }
+    button {
+      padding: 12px 16px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--ink);
+      text-transform: uppercase;
+    }
+    button:hover { border-color: var(--cbd-blue); background: #eefafd; }
+    .btnPrimary {
+      font-size: 17px;
+      padding: 15px 18px;
+      background: var(--cbd-blue);
+      color: #ffffff;
+      border-color: var(--cbd-blue);
+      width: 100%;
+      font-weight: 700;
+      box-shadow: 0 10px 24px rgba(0, 121, 184, 0.22);
+    }
+    .btnPrimary:hover { background: var(--cbd-deep); color: #ffffff; }
+    .btnWide { min-width: 220px; }
+    #msg { margin: 12px 0 6px; font-size: 15px; font-weight: 700; min-height: 22px; }
+    .good { color: var(--good); }
+    .bad { color: var(--danger); }
+    .warn { color: var(--warn); }
+    .hr { border: none; border-top: 1px solid var(--line); margin: 14px 0; }
+    .termsRow { display: flex; align-items: center; gap: 10px; margin: 6px 0 14px; font-size: 14px; color: var(--muted); }
+    .termsRow input { width: auto; }
+    .termsLink { color: var(--cbd-deep); text-decoration: underline; cursor: pointer; font-weight: 700; }
+    .natMobile { display: none; }
+    .natDesktop { display: block; }
+    .natWrap { position: static; }
+    .natList {
+      position: static;
+      margin-top: 6px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      max-height: 220px;
+      overflow-y: auto;
+      display: none;
+    }
+    .natItem {
+      padding: 10px 12px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--ink);
+    }
+    .natItem:hover { background: #eaf7fb; }
+    .hiddenSelect { display: none; }
+    .modalOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 44, 66, 0.62);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+    .modal {
+      background: var(--paper);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 20px;
+      width: 100%;
+      max-width: 540px;
+      box-shadow: 0 24px 70px rgba(0, 44, 66, 0.22);
+    }
+    .modal h3 { margin: 0 0 8px; text-transform: uppercase; }
+    .modal .modalBody { font-size: 14px; color: var(--muted); line-height: 1.5; }
+    .modalActions { margin-top: 16px; display: flex; justify-content: flex-end; gap: 10px; }
+    .switchWrap { display: flex; justify-content: center; margin: 0 0 18px; }
+    .switch {
+      display: flex;
+      border: 1px solid var(--line);
+      overflow: hidden;
+      background: #f2fbfd;
+      border-radius: 999px;
+      padding: 3px;
+    }
+    .switch button { border: none; background: transparent; padding: 10px 18px; font-size: 14px; border-radius: 999px; }
+    .switch .active { background: var(--cbd-blue); color: #ffffff; }
+    .childBlock { border: 1px dashed rgba(0, 121, 184, 0.45); padding: 12px; margin-top: 10px; background: #f3fbf5; border-radius: 8px; }
+    .childRow { align-items: end; }
+    .childRow .field { min-width: 160px; }
+    .iconBtn {
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      font-size: 20px;
+      line-height: 1;
+    }
+    #addChildBtn { width: 100%; }
+    .helper { font-size: 12px; color: var(--muted); margin-top: 6px; }
+    .inputError { border-color: var(--danger); box-shadow: 0 0 0 4px rgba(176, 0, 32, 0.14); }
+    .siteFooter {
+      margin-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.48);
+      padding-top: 12px;
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+    @media (max-width: 860px) {
+      .hero { max-width: 760px; }
+    }
+    @media (max-width: 720px) {
+      .page { width: min(100% - 24px, 1120px); padding: 14px 0 28px; }
+      .topbar { align-items: flex-start; margin-bottom: 18px; }
+      .logoWrap { padding: 9px 12px; }
+      .logoWrap img { width: 128px; }
+      .card { padding: 16px; }
+      .row { gap: 10px; }
+      .field { min-width: 100%; }
+      .btnWide { width: 100%; min-width: 0; }
+      .switch button { padding: 10px 14px; }
+      .natMobile { display: block; }
+      .natDesktop { display: none; }
+      .siteFooter { flex-direction: column; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="logoWrap">
+        <img src="cbd-logo.svg" alt="Commercial Bank of Dubai" />
+      </div>
+    </header>
+
+    <main class="hero">
+      <section class="card" aria-label="Registration form">
+        <div class="formHeader">
+          <h2>Registration Details</h2>
+        </div>
+
+        <div class="switchWrap">
+          <div class="switch">
+            <button id="adultTab" type="button" class="active">Adult</button>
+            <button id="childTab" type="button">Child</button>
+          </div>
+        </div>
+
+        <div id="adultForm">
+          <div class="row">
+            <div class="field">
+              <label>First Name *</label>
+              <input id="a_first" placeholder="First name" autocomplete="given-name" />
+            </div>
+            <div class="field">
+              <label>Last Name *</label>
+              <input id="a_last" placeholder="Last name" autocomplete="family-name" />
+            </div>
+            <div class="field">
+              <label>Phone *</label>
+              <input id="a_phone" placeholder="05X XXX XXXX or +9715XXXXXXX" inputmode="tel" pattern="[0-9+]*" autocomplete="tel" />
+              <div id="a_phone_help" class="helper">Format: 05X XXX XXXX</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>Email *</label>
+              <input id="a_email" placeholder="name@email.com" inputmode="email" autocomplete="email" />
+            </div>
+            <div class="field">
+              <label>Age Range *</label>
+              <select id="a_age"></select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>Nationality *</label>
+              <div class="natWrap natMobile">
+                <input id="a_nat_search" placeholder="Search nationality..." />
+                <div id="a_nat_list" class="natList"></div>
+              </div>
+              <select id="a_nat" class="natDesktop"></select>
+            </div>
+            <div class="field">
+              <label>Emirate *</label>
+              <select id="a_emir"></select>
+            </div>
+          </div>
+
+          <div id="adultTermsSlot"></div>
+
+          <div class="row" style="margin-top:0;">
+            <button id="generateAdultBtn" class="btnPrimary" type="button">Generate Adult QR</button>
+          </div>
+        </div>
+
+        <div id="childForm" style="display:none;">
+          <div class="row">
+            <div class="field">
+              <label>Parent First Name *</label>
+              <input id="p_first" placeholder="Parent first name" autocomplete="given-name" />
+            </div>
+            <div class="field">
+              <label>Parent Last Name *</label>
+              <input id="p_last" placeholder="Parent last name" autocomplete="family-name" />
+            </div>
+            <div class="field">
+              <label>Parent Phone *</label>
+              <input id="p_phone" placeholder="05X XXX XXXX or +9715XXXXXXX" inputmode="tel" pattern="[0-9+]*" autocomplete="tel" />
+              <div id="p_phone_help" class="helper">Format: 05X XXX XXXX</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>Parent Email *</label>
+              <input id="p_email" placeholder="parent@email.com" inputmode="email" autocomplete="email" />
+            </div>
+            <div class="field">
+              <label>Nationality *</label>
+              <div class="natWrap natMobile">
+                <input id="p_nat_search" placeholder="Search nationality..." />
+                <div id="p_nat_list" class="natList"></div>
+              </div>
+              <select id="p_nat" class="natDesktop"></select>
+            </div>
+            <div class="field">
+              <label>Emirate *</label>
+              <select id="p_emir"></select>
+            </div>
+          </div>
+
+          <div class="childBlock">
+            <div id="childrenWrap"></div>
+            <div class="row" style="margin-top:8px;">
+              <button id="addChildBtn" type="button">+ Add Child</button>
+            </div>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="row">
+            <div class="field">
+              <label>Parent participates? (optional)</label>
+              <select id="parent_participant">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Parent Age Range (required only if Yes)</label>
+              <select id="parent_age"></select>
+            </div>
+          </div>
+
+          <div id="childTermsSlot"></div>
+
+          <div class="row" style="margin-top:0;">
+            <button id="generateChildBtn" class="btnPrimary" type="button">Generate Child QR</button>
+          </div>
+        </div>
+
+        <div id="msg"></div>
+
+        <div class="termsRow">
+          <input id="termsCheck" type="checkbox" />
+          <div>I agree to the <span id="termsLink" class="termsLink">Terms &amp; Conditions</span></div>
+        </div>
+
+        <div class="hr"></div>
+        <div class="row">
+          <button id="clearBtn" class="btnWide" type="button">Clear</button>
+        </div>
+      </section>
+    </main>
+
+    <div class="siteFooter">
+      <span>Almost Impossible Agency | Commercial Bank of Dubai &copy; 2026</span>
+      <span>Event registration module</span>
+    </div>
+  </div>
+
+  <div id="termsModal" class="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="termsTitle">
+    <div class="modal">
+      <h3 id="termsTitle">Terms &amp; Conditions</h3>
+      <div class="modalBody">
+        Attendee information is used for event registration and QR check-in only. Please confirm the details are accurate before generating the QR code.
+      </div>
+      <div class="modalActions">
+        <button id="termsCloseBtn" type="button" class="btnGhost">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="libs/qrcode.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
